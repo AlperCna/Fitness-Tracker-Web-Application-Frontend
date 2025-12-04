@@ -1,0 +1,108 @@
+import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
+import {
+    LayoutDashboard,
+    Dumbbell,
+    NotebookPen,
+    LogOut,
+    User
+} from "lucide-react";
+
+const DashboardLayout = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Kullanıcı adını alalım
+    const userEmail = localStorage.getItem("email") || "Sporcu";
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("email");
+        navigate("/login");
+    };
+
+    const menuItems = [
+        { path: "/dashboard", name: "Genel Bakış", icon: <LayoutDashboard size={20} /> },
+        { path: "/dashboard/exercises", name: "Egzersiz Kütüphanesi", icon: <Dumbbell size={20} /> },
+        { path: "/dashboard/workouts", name: "Antrenmanlarım", icon: <NotebookPen size={20} /> },
+    ];
+
+    return (
+        <div className="flex h-screen bg-gray-50">
+
+            {/* --- SOL MENÜ (SIDEBAR) --- */}
+            <aside className="w-72 bg-slate-900 text-white flex flex-col shadow-2xl">
+                <div className="p-6 border-b border-slate-800 flex items-center gap-3">
+                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-xl">
+                        F
+                    </div>
+                    <span className="text-xl font-bold tracking-wide">FitnessApp</span>
+                </div>
+
+                <nav className="flex-1 p-4 space-y-2 mt-2">
+                    {menuItems.map((item) => {
+                        const isActive = location.pathname === item.path;
+                        return (
+                            <Link
+                                key={item.path}
+                                to={item.path}
+                                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                                    isActive
+                                        ? "bg-blue-600 text-white shadow-lg shadow-blue-900/50"
+                                        : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                                }`}
+                            >
+                <span className={isActive ? "text-white" : "text-slate-400 group-hover:text-blue-400"}>
+                  {item.icon}
+                </span>
+                                <span className="font-medium">{item.name}</span>
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                <div className="p-4 border-t border-slate-800 bg-slate-950/50">
+                    <div className="flex items-center gap-3 mb-4 px-2">
+                        <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-300">
+                            <User size={20} />
+                        </div>
+                        <div className="overflow-hidden">
+                            <p className="text-sm font-medium text-white truncate">{userEmail}</p>
+                            <p className="text-xs text-slate-500">Standart Üye</p>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center justify-center gap-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white py-2.5 rounded-lg transition-all duration-200 text-sm font-medium border border-red-500/20"
+                    >
+                        <LogOut size={16} />
+                        Güvenli Çıkış
+                    </button>
+                </div>
+            </aside>
+
+            {/* --- ANA İÇERİK (HEADER + SAYFA) --- */}
+            <div className="flex-1 flex flex-col h-screen overflow-hidden">
+
+                <header className="bg-white h-16 border-b border-gray-200 flex items-center justify-between px-8 shadow-sm">
+                    <h2 className="text-gray-700 font-semibold text-lg">
+                        {menuItems.find(m => m.path === location.pathname)?.name || "Panel"}
+                    </h2>
+                    <div className="flex items-center gap-4">
+              <span className="text-xs font-medium px-3 py-1 bg-green-100 text-green-700 rounded-full border border-green-200">
+                ● Sistem Online
+              </span>
+                    </div>
+                </header>
+
+                <main className="flex-1 overflow-y-auto p-8 bg-gray-50">
+                    {/* Buraya Dashboard.jsx veya diğer sayfalar gelecek */}
+                    <Outlet />
+                </main>
+            </div>
+
+        </div>
+    );
+};
+
+export default DashboardLayout;

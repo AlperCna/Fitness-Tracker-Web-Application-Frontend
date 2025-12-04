@@ -1,14 +1,19 @@
-// src/App.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { setAuthToken } from "./services/api";
 
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
+// 1. Yeni oluşturduğumuz bileşenleri içeri alıyoruz
+import ProtectedRoute from "./components/ProtectedRoute";
+import DashboardLayout from "./components/DashboardLayout";
+
+// Sayfalar
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-    // Sayfa yenilense bile token varsa axios header'a tekrar koy
+
+    // Sayfa yenilenince token gitmesin diye yapılan ayar
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
@@ -16,33 +21,32 @@ function App() {
         }
     }, []);
 
-    // Basit korumalı route bileşeni
-    const RequireAuth = ({ children }) => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            return <Navigate to="/login" replace />;
-        }
-        return children;
-    };
-
     return (
         <Routes>
-            {/* Ana sayfa → login'e yönlendir */}
+            {/* Giriş yapmamış biri ana sayfaya gelirse Login'e gitsin */}
             <Route path="/" element={<Navigate to="/login" replace />} />
 
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
-            <Route
-                path="/dashboard"
-                element={
-                    <RequireAuth>
-                        <Dashboard />
-                    </RequireAuth>
-                }
-            />
+            {/* 🔒 GÜVENLİK DUVARI (ProtectedRoute) */}
+            <Route element={<ProtectedRoute />}>
 
-            {/* Tanımsız route'lar da login'e gitsin */}
+                {/* 🎨 TASARIM İSKELETİ (DashboardLayout) */}
+                {/* Tüm yönetim paneli sayfaları bu layout'un içinde açılacak */}
+                <Route path="/dashboard" element={<DashboardLayout />}>
+
+                    {/* /dashboard adresine gelince Dashboard.jsx (İstatistikler) açılsın */}
+                    <Route index element={<Dashboard />} />
+
+                    {/* İleride buraya başka sayfalar da ekleyeceğiz:
+                        Örn: <Route path="exercises" element={<Exercises />} />
+                    */}
+
+                </Route>
+            </Route>
+
+            {/* Bilinmeyen bir adrese giderse Login'e at */}
             <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
     );
