@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginRequest, setAuthToken } from "../services/api";
 import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
+import { LogoText } from "../components/Logo"; // YENİ LOGO İMPORT EDİLDİ
 
 function Login() {
     const navigate = useNavigate();
@@ -36,10 +37,13 @@ function Login() {
 
             {/* SOL TARAFI: FORM ALANI */}
             <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 md:px-24 lg:px-32 relative">
+
                 <div className="mb-8">
-                    <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
-                        <span className="text-white font-bold text-xl">F</span>
+                    {/* YENİ LOGO BURAYA EKLENDİ */}
+                    <div className="mb-6">
+                        <LogoText />
                     </div>
+
                     <h1 className="text-3xl font-bold text-slate-900">Tekrar Hoş Geldin! 👋</h1>
                     <p className="text-slate-500 mt-2">Gelişimini takip etmek için hesabına giriş yap.</p>
                 </div>

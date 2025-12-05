@@ -6,6 +6,7 @@ import {
     LogOut,
     User
 } from "lucide-react";
+import { LogoText } from "./Logo"; // YENİ LOGO İMPORT EDİLDİ
 
 const DashboardLayout = () => {
     const navigate = useNavigate();
@@ -31,11 +32,10 @@ const DashboardLayout = () => {
 
             {/* --- SOL MENÜ (SIDEBAR) --- */}
             <aside className="w-72 bg-slate-900 text-white flex flex-col shadow-2xl">
-                <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-xl">
-                        F
-                    </div>
-                    <span className="text-xl font-bold tracking-wide">FitnessApp</span>
+
+                {/* LOGO ALANI GÜNCELLENDİ: ARTIK MAVİ KUTU YOK, MODERN LOGO VAR */}
+                <div className="p-6 border-b border-slate-800 flex items-center">
+                    <LogoText color="text-white" />
                 </div>
 
                 <nav className="flex-1 p-4 space-y-2 mt-2">

@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { setAuthToken } from "./services/api";
 
-// 1. Yeni oluşturduğumuz bileşenleri içeri alıyoruz
+// Bileşenler
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./components/DashboardLayout";
 
@@ -10,6 +10,7 @@ import DashboardLayout from "./components/DashboardLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import ExerciseLibrary from "./pages/ExerciseLibrary"; // ✅ YENİ: Dosyayı içeri aldık
 
 function App() {
 
@@ -33,15 +34,14 @@ function App() {
             <Route element={<ProtectedRoute />}>
 
                 {/* 🎨 TASARIM İSKELETİ (DashboardLayout) */}
-                {/* Tüm yönetim paneli sayfaları bu layout'un içinde açılacak */}
                 <Route path="/dashboard" element={<DashboardLayout />}>
 
                     {/* /dashboard adresine gelince Dashboard.jsx (İstatistikler) açılsın */}
                     <Route index element={<Dashboard />} />
 
-                    {/* İleride buraya başka sayfalar da ekleyeceğiz:
-                        Örn: <Route path="exercises" element={<Exercises />} />
-                    */}
+                    {/* ✅ YENİ ROUTE: Egzersiz Kütüphanesi Sayfası */}
+                    {/* Tarayıcıda /dashboard/exercises adresine gidince burası açılacak */}
+                    <Route path="exercises" element={<ExerciseLibrary />} />
 
                 </Route>
             </Route>
