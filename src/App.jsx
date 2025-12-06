@@ -10,7 +10,8 @@ import DashboardLayout from "./components/DashboardLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import ExerciseLibrary from "./pages/ExerciseLibrary"; // ✅ YENİ: Dosyayı içeri aldık
+import ExerciseLibrary from "./pages/ExerciseLibrary";
+import WorkoutPage from "./pages/WorkoutPage"; // ✅ YENİ EKLENDİ
 
 function App() {
 
@@ -39,9 +40,24 @@ function App() {
                     {/* /dashboard adresine gelince Dashboard.jsx (İstatistikler) açılsın */}
                     <Route index element={<Dashboard />} />
 
-                    {/* ✅ YENİ ROUTE: Egzersiz Kütüphanesi Sayfası */}
-                    {/* Tarayıcıda /dashboard/exercises adresine gidince burası açılacak */}
+                    {/* Egzersiz Kütüphanesi */}
                     <Route path="exercises" element={<ExerciseLibrary />} />
+
+                    {/* ✅ YENİ ROTALAR: ANTRENMANLAR */}
+
+                    {/* 1. Antrenman Listesi (Sidebar'a tıklayınca burası açılır - Şimdilik boş) */}
+                    <Route path="workouts" element={
+                        <div className="p-10 text-center">
+                            <h2 className="text-xl font-bold mb-4">Antrenman Geçmişi</h2>
+                            <p className="text-slate-500 mb-4">Geçmiş antrenmanların burada listelenecek.</p>
+                            <a href="/dashboard/workouts/new" className="bg-blue-600 text-white px-4 py-2 rounded">
+                                + Yeni Antrenman Ekle
+                            </a>
+                        </div>
+                    } />
+
+                    {/* 2. Antrenman Ekleme Sayfası (Asıl yaptığımız sayfa) */}
+                    <Route path="workouts/new" element={<WorkoutPage />} />
 
                 </Route>
             </Route>

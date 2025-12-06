@@ -1,27 +1,52 @@
-// src/services/api.js
 import axios from "axios";
 
+// Axios instance oluştur
 const api = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "http://localhost:8080", // Backend adresin
 });
 
-// Token'ı tüm isteklerde kullanmak için header'a ekler
+// 🔥 INTERCEPTOR (Her isteği yakala ve token ekle)
+api.interceptors.request.use(
+    (config) => {
+        // Tarayıcı hafızasından token'ı al
+        const token = localStorage.getItem("token");
+
+        // Eğer token varsa, header'a ekle
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Login ve Register sayfalarında kullanılan eski fonksiyonlar hata vermesin diye
+// boş bir fonksiyon olarak bırakıyoruz (Geriye dönük uyumluluk)
 export const setAuthToken = (token) => {
     if (token) {
-        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        localStorage.setItem("token", token);
     } else {
-        delete api.defaults.headers.common["Authorization"];
+        localStorage.removeItem("token");
     }
 };
 
-// LOGIN isteği
+// Login İsteği
 export const loginRequest = (email, password) => {
     return api.post("/auth/login", { email, password });
 };
 
-// REGISTER isteği
+// Register İsteği
 export const registerRequest = (username, email, password) => {
-    return api.post("/auth/register", { username, email, password });
+    // Backend'de role lazım mı kontrol et, genelde user otomatik atanır
+    return api.post("/auth/register", {
+        username,
+        email,
+        password,
+        role: ["user"] // Eğer backend role bekliyorsa
+    });
 };
 
 export default api;
