@@ -11,7 +11,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ExerciseLibrary from "./pages/ExerciseLibrary";
-import WorkoutPage from "./pages/WorkoutPage"; // ✅ YENİ EKLENDİ
+import WorkoutPage from "./pages/WorkoutPage";
+import MyWorkouts from "./pages/MyWorkouts";
+import EditWorkout from "./pages/EditWorkout";
+import Analytics from "./pages/Analytics"; // ✅ YENİ: İstatistik Sayfası Import Edildi
 
 function App() {
 
@@ -43,21 +46,19 @@ function App() {
                     {/* Egzersiz Kütüphanesi */}
                     <Route path="exercises" element={<ExerciseLibrary />} />
 
-                    {/* ✅ YENİ ROTALAR: ANTRENMANLAR */}
+                    {/* ✅ ANTRENMAN ROTALARI */}
 
-                    {/* 1. Antrenman Listesi (Sidebar'a tıklayınca burası açılır - Şimdilik boş) */}
-                    <Route path="workouts" element={
-                        <div className="p-10 text-center">
-                            <h2 className="text-xl font-bold mb-4">Antrenman Geçmişi</h2>
-                            <p className="text-slate-500 mb-4">Geçmiş antrenmanların burada listelenecek.</p>
-                            <a href="/dashboard/workouts/new" className="bg-blue-600 text-white px-4 py-2 rounded">
-                                + Yeni Antrenman Ekle
-                            </a>
-                        </div>
-                    } />
+                    {/* 1. Antrenman Listesi (Geçmiş) */}
+                    <Route path="workouts" element={<MyWorkouts />} />
 
-                    {/* 2. Antrenman Ekleme Sayfası (Asıl yaptığımız sayfa) */}
+                    {/* 2. Yeni Antrenman Ekleme Sayfası */}
                     <Route path="workouts/new" element={<WorkoutPage />} />
+
+                    {/* 3. Antrenman Düzenleme Sayfası (Dinamik ID alır) */}
+                    <Route path="workouts/edit/:id" element={<EditWorkout />} />
+
+                    {/* ✅ YENİ: İstatistikler Sayfası */}
+                    <Route path="analytics" element={<Analytics />} />
 
                 </Route>
             </Route>

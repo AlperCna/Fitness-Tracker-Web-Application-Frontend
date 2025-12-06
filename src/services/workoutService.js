@@ -22,3 +22,27 @@ export const createWorkout = async (workoutData) => {
         throw error;
     }
 };
+
+
+// Geçmiş antrenmanları getir
+export const getMyWorkouts = async () => {
+    // Backend endpoint: GET /workouts
+    return await api.get("/workouts");
+};
+
+
+
+// Antrenman Sil
+export const deleteWorkout = async (id) => {
+    return await api.delete(`/workouts/${id}`);
+};
+
+// Tekil Antrenman Getir (Edit sayfası için)
+export const getWorkoutById = async (id) => {
+    return await api.get(`/workouts/${id}`);
+};
+
+// Antrenman Güncelle
+export const updateWorkout = async (id, workoutData) => {
+    return await api.put(`/workouts/${id}`, workoutData);
+};

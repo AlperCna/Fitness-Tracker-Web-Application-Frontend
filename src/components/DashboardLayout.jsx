@@ -4,9 +4,10 @@ import {
     Dumbbell,
     NotebookPen,
     LogOut,
-    User
+    User,
+    BarChart2 // ✅ YENİ: İstatistik İkonu eklendi
 } from "lucide-react";
-import { LogoText } from "./Logo"; // YENİ LOGO İMPORT EDİLDİ
+import { LogoText } from "./Logo";
 
 const DashboardLayout = () => {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ const DashboardLayout = () => {
         { path: "/dashboard", name: "Genel Bakış", icon: <LayoutDashboard size={20} /> },
         { path: "/dashboard/exercises", name: "Egzersiz Kütüphanesi", icon: <Dumbbell size={20} /> },
         { path: "/dashboard/workouts", name: "Antrenmanlarım", icon: <NotebookPen size={20} /> },
+        { path: "/dashboard/analytics", name: "İstatistikler", icon: <BarChart2 size={20} /> }, // ✅ YENİ MENÜ LİNKİ
     ];
 
     return (
@@ -33,7 +35,7 @@ const DashboardLayout = () => {
             {/* --- SOL MENÜ (SIDEBAR) --- */}
             <aside className="w-72 bg-slate-900 text-white flex flex-col shadow-2xl">
 
-                {/* LOGO ALANI GÜNCELLENDİ: ARTIK MAVİ KUTU YOK, MODERN LOGO VAR */}
+                {/* LOGO ALANI */}
                 <div className="p-6 border-b border-slate-800 flex items-center">
                     <LogoText color="text-white" />
                 </div>
@@ -51,9 +53,9 @@ const DashboardLayout = () => {
                                         : "text-slate-400 hover:bg-slate-800 hover:text-white"
                                 }`}
                             >
-                <span className={isActive ? "text-white" : "text-slate-400 group-hover:text-blue-400"}>
-                  {item.icon}
-                </span>
+                                <span className={isActive ? "text-white" : "text-slate-400 group-hover:text-blue-400"}>
+                                  {item.icon}
+                                </span>
                                 <span className="font-medium">{item.name}</span>
                             </Link>
                         );
@@ -89,9 +91,9 @@ const DashboardLayout = () => {
                         {menuItems.find(m => m.path === location.pathname)?.name || "Panel"}
                     </h2>
                     <div className="flex items-center gap-4">
-              <span className="text-xs font-medium px-3 py-1 bg-green-100 text-green-700 rounded-full border border-green-200">
-                ● Sistem Online
-              </span>
+                        <span className="text-xs font-medium px-3 py-1 bg-green-100 text-green-700 rounded-full border border-green-200">
+                            ● Sistem Online
+                        </span>
                     </div>
                 </header>
 
