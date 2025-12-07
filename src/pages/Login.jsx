@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"; // ✅ useEffect EKLENDİ
 import { Link, useNavigate } from "react-router-dom";
 import { loginRequest, setAuthToken } from "../services/api";
 import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
-import { LogoText } from "../components/Logo"; // YENİ LOGO İMPORT EDİLDİ
+import { LogoText } from "../components/Logo";
 
 function Login() {
     const navigate = useNavigate();
@@ -10,6 +10,16 @@ function Login() {
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
+    // ✅ YENİ EKLENEN KISIM: SAYFA AÇILINCA ESKİ VERİLERİ SİL
+    useEffect(() => {
+        // Eğer localStorage'da eski bir token varsa temizle
+        localStorage.removeItem("token");
+        localStorage.removeItem("email");
+
+        // API servisindeki Authorization header'ı kaldır
+        setAuthToken(null);
+    }, []);
 
     const handleLogin = async (e) => {
         e.preventDefault();
