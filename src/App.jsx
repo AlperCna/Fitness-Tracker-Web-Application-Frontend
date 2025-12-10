@@ -14,7 +14,9 @@ import ExerciseLibrary from "./pages/ExerciseLibrary";
 import WorkoutPage from "./pages/WorkoutPage";
 import MyWorkouts from "./pages/MyWorkouts";
 import EditWorkout from "./pages/EditWorkout";
-import Analytics from "./pages/Analytics"; // ✅ YENİ: İstatistik Sayfası Import Edildi
+import Analytics from "./pages/Analytics";
+import ProgressPage from "./pages/ProgressPage"; // ✅ 1. IMPORT EKLENDİ
+// import AdminPanel from "./pages/AdminPanel"; // Eğer React Admin Paneli yaptıysan bunu açabilirsin
 
 function App() {
 
@@ -46,7 +48,7 @@ function App() {
                     {/* Egzersiz Kütüphanesi */}
                     <Route path="exercises" element={<ExerciseLibrary />} />
 
-                    {/* ✅ ANTRENMAN ROTALARI */}
+                    {/* --- ANTRENMAN ROTALARI --- */}
 
                     {/* 1. Antrenman Listesi (Geçmiş) */}
                     <Route path="workouts" element={<MyWorkouts />} />
@@ -57,8 +59,16 @@ function App() {
                     {/* 3. Antrenman Düzenleme Sayfası (Dinamik ID alır) */}
                     <Route path="workouts/edit/:id" element={<EditWorkout />} />
 
-                    {/* ✅ YENİ: İstatistikler Sayfası */}
+                    {/* --- İSTATİSTİK VE GELİŞİM --- */}
+
+                    {/* Genel Analizler */}
                     <Route path="analytics" element={<Analytics />} />
+
+                    {/* ✅ 2. ROTA EKLENDİ: Gelişim Takibi */}
+                    <Route path="progress" element={<ProgressPage />} />
+
+                    {/* (Opsiyonel) React Admin Paneli kullandıysan: */}
+                    {/* <Route path="admin" element={<AdminPanel />} /> */}
 
                 </Route>
             </Route>

@@ -5,7 +5,8 @@ import {
     NotebookPen,
     LogOut,
     User,
-    BarChart2 // ✅ YENİ: İstatistik İkonu eklendi
+    BarChart2,
+    Scale // ✅ YENİ: Terazi İkonu eklendi
 } from "lucide-react";
 import { LogoText } from "./Logo";
 
@@ -26,7 +27,9 @@ const DashboardLayout = () => {
         { path: "/dashboard", name: "Genel Bakış", icon: <LayoutDashboard size={20} /> },
         { path: "/dashboard/exercises", name: "Egzersiz Kütüphanesi", icon: <Dumbbell size={20} /> },
         { path: "/dashboard/workouts", name: "Antrenmanlarım", icon: <NotebookPen size={20} /> },
-        { path: "/dashboard/analytics", name: "İstatistikler", icon: <BarChart2 size={20} /> }, // ✅ YENİ MENÜ LİNKİ
+        { path: "/dashboard/analytics", name: "İstatistikler", icon: <BarChart2 size={20} /> },
+        // ✅ YENİ MENÜ LİNKİ:
+        { path: "/dashboard/progress", name: "Gelişim Takibi", icon: <Scale size={20} /> },
     ];
 
     return (
