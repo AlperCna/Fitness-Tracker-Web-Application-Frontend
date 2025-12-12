@@ -15,8 +15,8 @@ import WorkoutPage from "./pages/WorkoutPage";
 import MyWorkouts from "./pages/MyWorkouts";
 import EditWorkout from "./pages/EditWorkout";
 import Analytics from "./pages/Analytics";
-import ProgressPage from "./pages/ProgressPage"; // ✅ 1. IMPORT EKLENDİ
-// import AdminPanel from "./pages/AdminPanel"; // Eğer React Admin Paneli yaptıysan bunu açabilirsin
+import ProgressPage from "./pages/ProgressPage";
+import ProfilePage from "./pages/ProfilePage"; // ✅ 1. IMPORT EKLENDİ
 
 function App() {
 
@@ -64,11 +64,11 @@ function App() {
                     {/* Genel Analizler */}
                     <Route path="analytics" element={<Analytics />} />
 
-                    {/* ✅ 2. ROTA EKLENDİ: Gelişim Takibi */}
+                    {/* Gelişim Takibi */}
                     <Route path="progress" element={<ProgressPage />} />
 
-                    {/* (Opsiyonel) React Admin Paneli kullandıysan: */}
-                    {/* <Route path="admin" element={<AdminPanel />} /> */}
+                    {/* ✅ 2. ROTA EKLENDİ: Profil Sayfası */}
+                    <Route path="profile" element={<ProfilePage />} />
 
                 </Route>
             </Route>

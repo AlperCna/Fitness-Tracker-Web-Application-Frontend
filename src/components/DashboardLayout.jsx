@@ -6,7 +6,8 @@ import {
     LogOut,
     User,
     BarChart2,
-    Scale // ✅ YENİ: Terazi İkonu eklendi
+    Scale,
+    Settings // ✅ İstersen ikon ekleyebilirsin
 } from "lucide-react";
 import { LogoText } from "./Logo";
 
@@ -28,7 +29,6 @@ const DashboardLayout = () => {
         { path: "/dashboard/exercises", name: "Egzersiz Kütüphanesi", icon: <Dumbbell size={20} /> },
         { path: "/dashboard/workouts", name: "Antrenmanlarım", icon: <NotebookPen size={20} /> },
         { path: "/dashboard/analytics", name: "İstatistikler", icon: <BarChart2 size={20} /> },
-        // ✅ YENİ MENÜ LİNKİ:
         { path: "/dashboard/progress", name: "Gelişim Takibi", icon: <Scale size={20} /> },
     ];
 
@@ -65,16 +65,25 @@ const DashboardLayout = () => {
                     })}
                 </nav>
 
+                {/* --- ALT KISIM (KULLANICI PROFİLİ) --- */}
                 <div className="p-4 border-t border-slate-800 bg-slate-950/50">
-                    <div className="flex items-center gap-3 mb-4 px-2">
-                        <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-300">
+
+                    {/* 🔥 GÜNCELLENDİ: Burası artık Profil Sayfasına giden bir Link */}
+                    <Link
+                        to="/dashboard/profile"
+                        className="flex items-center gap-3 mb-4 px-2 py-2 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer group"
+                        title="Profili Düzenle"
+                    >
+                        <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                             <User size={20} />
                         </div>
                         <div className="overflow-hidden">
-                            <p className="text-sm font-medium text-white truncate">{userEmail}</p>
-                            <p className="text-xs text-slate-500">Standart Üye</p>
+                            <p className="text-sm font-medium text-white truncate group-hover:text-blue-400 transition-colors">
+                                {userEmail}
+                            </p>
+                            <p className="text-xs text-slate-500">Profili Gör →</p>
                         </div>
-                    </div>
+                    </Link>
 
                     <button
                         onClick={handleLogout}
@@ -86,12 +95,15 @@ const DashboardLayout = () => {
                 </div>
             </aside>
 
-            {/* --- ANA İÇERİK (HEADER + SAYFA) --- */}
+            {/* --- ANA İÇERİK --- */}
             <div className="flex-1 flex flex-col h-screen overflow-hidden">
 
                 <header className="bg-white h-16 border-b border-gray-200 flex items-center justify-between px-8 shadow-sm">
                     <h2 className="text-gray-700 font-semibold text-lg">
-                        {menuItems.find(m => m.path === location.pathname)?.name || "Panel"}
+                        {/* Eğer 'profile' sayfasındaysak başlık doğru görünsün */}
+                        {location.pathname === "/dashboard/profile"
+                            ? "Kullanıcı Profili"
+                            : (menuItems.find(m => m.path === location.pathname)?.name || "Panel")}
                     </h2>
                     <div className="flex items-center gap-4">
                         <span className="text-xs font-medium px-3 py-1 bg-green-100 text-green-700 rounded-full border border-green-200">
@@ -101,7 +113,6 @@ const DashboardLayout = () => {
                 </header>
 
                 <main className="flex-1 overflow-y-auto p-8 bg-gray-50">
-                    {/* Buraya Dashboard.jsx veya diğer sayfalar gelecek */}
                     <Outlet />
                 </main>
             </div>

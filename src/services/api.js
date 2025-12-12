@@ -25,7 +25,7 @@ api.interceptors.request.use(
 
 // --- AUTH (Giriş/Kayıt) İŞLEMLERİ ---
 
-// Token yönetimi (Geriye dönük uyumluluk için)
+// Token yönetimi
 export const setAuthToken = (token) => {
     if (token) {
         localStorage.setItem("token", token);
@@ -45,11 +45,12 @@ export const registerRequest = (username, email, password) => {
         username,
         email,
         password,
-        role: ["user"] // Opsiyonel
+        role: ["user"]
     });
 };
 
-// --- 🔥 YENİ EKLENENLER: PROGRESS (GELİŞİM) SERVİSLERİ ---
+// --- 🔥 PROGRESS (GELİŞİM/KİLO) SERVİSLERİ ---
+// Profil sayfasında ve Gelişim Takibi sayfasında bunları kullanıyoruz
 
 // Geçmiş kayıtları getir (GET)
 export const getProgressLogs = () => {
@@ -57,7 +58,7 @@ export const getProgressLogs = () => {
 };
 
 // Yeni kilo kaydı ekle (POST)
-// data formatı: { weight: 75.5, date: "2025-12-08" }
+// Veri formatı: { weight: 75.5, date: "2025-12-08" }
 export const addProgressLog = (data) => {
     return api.post("/progress", data);
 };
@@ -67,5 +68,5 @@ export const deleteProgressLog = (id) => {
     return api.delete(`/progress/${id}`);
 };
 
-// Default export (api instance'ı)
+// Default export
 export default api;
