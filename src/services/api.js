@@ -1,32 +1,30 @@
 import axios from "axios";
 
-// 1. Axios instance oluştur
+// 🔥 Ortama göre backend URL belirle
+const BASE_URL =
+    window.location.hostname === "localhost"
+        ? "http://localhost:8080"
+        : "https://fitness-tracker-web-application.onrender.com";
+
+// Axios instance
 const api = axios.create({
-    baseURL: "https://fitness-tracker-web-application.onrender.com",
+    baseURL: BASE_URL,
 });
 
-
-// 2. INTERCEPTOR (Her isteği yakala ve token ekle)
+// JWT interceptor
 api.interceptors.request.use(
     (config) => {
-        // Tarayıcı hafızasından token'ı al
         const token = localStorage.getItem("token");
-
-        // Eğer token varsa, header'a ekle
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
-
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
-// --- AUTH (Giriş/Kayıt) İŞLEMLERİ ---
+// --- AUTH ---
 
-// Token yönetimi
 export const setAuthToken = (token) => {
     if (token) {
         localStorage.setItem("token", token);
@@ -35,39 +33,26 @@ export const setAuthToken = (token) => {
     }
 };
 
-// Login İsteği
-export const loginRequest = (email, password) => {
-    return api.post("/auth/login", { email, password });
-};
+export const loginRequest = (email, password) =>
+    api.post("/auth/login", { email, password });
 
-// Register İsteği
-export const registerRequest = (username, email, password) => {
-    return api.post("/auth/register", {
+export const registerRequest = (username, email, password) =>
+    api.post("/auth/register", {
         username,
         email,
         password,
-        role: ["user"]
+        role: ["user"],
     });
-};
 
-// --- 🔥 PROGRESS (GELİŞİM/KİLO) SERVİSLERİ ---
-// Profil sayfasında ve Gelişim Takibi sayfasında bunları kullanıyoruz
+// --- PROGRESS ---
 
-// Geçmiş kayıtları getir (GET)
-export const getProgressLogs = () => {
-    return api.get("/progress");
-};
+export const getProgressLogs = () => api.get("/progress");
 
-// Yeni kilo kaydı ekle (POST)
-// Veri formatı: { weight: 75.5, date: "2025-12-08" }
-export const addProgressLog = (data) => {
-    return api.post("/progress", data);
-};
+export const addProgressLog = (data) =>
+    api.post("/progress", data);
 
-// Kayıt sil (DELETE)
-export const deleteProgressLog = (id) => {
-    return api.delete(`/progress/${id}`);
-};
+export const deleteProgressLog = (id) =>
+    api.delete(`/progress/${id}`);
 
 // Default export
 export default api;
