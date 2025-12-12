@@ -2,8 +2,9 @@ import axios from "axios";
 
 // 1. Axios instance oluştur
 const api = axios.create({
-    baseURL: "http://localhost:8080", // Backend adresin
+    baseURL: "https://fitness-tracker-web-application.onrender.com",
 });
+
 
 // 2. INTERCEPTOR (Her isteği yakala ve token ekle)
 api.interceptors.request.use(
