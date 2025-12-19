@@ -27,19 +27,43 @@ function ExerciseLibrary() {
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            setLoading(true);
-            try {
-                const [exRes, catRes] = await Promise.all([
-                    api.get("/exercises"),
-                    api.get("/categories")
-                ]);
+            setLoading(true); // Yükleniyor...
 
-                const allExercises = exRes.data.content || exRes.data;
-                setExercises(allExercises);
+            try {
+                // 1. Kategorileri her zaman çek (Veri çok küçük olduğu için hızlıdır, sorun olmaz)
+                const catRes = await api.get("/categories");
                 setCategories(catRes.data);
+
+                // 2. EGZERSİZLERİ ÖNCE HAFIZADA ARA 🚀
+                // Benzersiz bir anahtar belirliyoruz
+                const CACHE_KEY = "fitness_exercises_cache_v1";
+                const cachedData = localStorage.getItem(CACHE_KEY);
+
+                if (cachedData) {
+                    // ✅ VARSA: Hiç sunucuya gitme, direkt buradan al (Milisaniyeler sürer)
+                    console.log("⚡ Egzersizler önbellekten (Cache) yüklendi.");
+                    setExercises(JSON.parse(cachedData));
+                    setLoading(false); // Ekranı hemen aç
+                } else {
+                    // ⏳ YOKSA: Mecbur sunucudan çek (İlk seferde 2-3 sn sürebilir)
+                    console.log("🌐 Egzersizler sunucudan çekiliyor...");
+
+                    // Tüm veriyi tek seferde çekiyoruz (Backend'in sayfalama ayarına göre size=2000 dedik)
+                    const exRes = await api.get("/exercises?page=0&size=2000");
+
+                    // Gelen veri yapısını kontrol et (Spring Page yapısı mı düz liste mi?)
+                    const allExercises = exRes.data.content || exRes.data;
+
+                    setExercises(allExercises);
+
+                    // 🔥 KRİTİK NOKTA: Veriyi bir sonraki giriş için kaydet
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(allExercises));
+
+                    setLoading(false);
+                }
+
             } catch (err) {
-                console.error("Veri hatası:", err);
-            } finally {
+                console.error("Veri yüklenirken hata oluştu:", err);
                 setLoading(false);
             }
         };

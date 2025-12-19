@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback, memo } from "react";
 import api from "../services/api";
 import { X, Search, CheckCircle, Dumbbell, Filter, Loader2 } from "lucide-react";
 
-// 🔥 PERFORMANS İÇİN AYRI BİLEŞEN (Memoized)
+//
 // Bu bileşen, sadece kendi "isSelected" durumu değişirse yeniden render olur.
 const ExerciseOption = memo(({ ex, isSelected, onToggle }) => {
     return (
