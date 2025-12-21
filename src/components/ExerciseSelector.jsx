@@ -96,5 +96,4 @@ const ExerciseSelector = ({ exercises, selectedId, onSelect }) => {
     );
 };
 
-// 👇 BU SATIR EKSİK OLDUĞU İÇİN HATA ALIYORSUN
 export default ExerciseSelector;

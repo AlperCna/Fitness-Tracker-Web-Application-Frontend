@@ -26,7 +26,7 @@ function ProfilePage() {
                 const storedEmail = localStorage.getItem("email") || "misafir@fitness.com";
                 const nameFromEmail = storedEmail.split("@")[0].charAt(0).toUpperCase() + storedEmail.split("@")[0].slice(1);
 
-                // 🔥 ÖNEMLİ DEĞİŞİKLİK: Herkesin kendi kutusu olsun (profile_ahmet@mail.com gibi)
+                //  Herkesin kendi kutusu olsun (profile_ahmet@mail.com gibi)
                 const storageKey = `userProfile_${storedEmail}`;
                 const savedProfile = JSON.parse(localStorage.getItem(storageKey)) || {};
 

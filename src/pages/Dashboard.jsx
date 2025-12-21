@@ -7,7 +7,7 @@ import {
 } from 'recharts';
 import {
     Activity, Clock, Calendar, Dumbbell, TrendingUp,
-    ArrowRight, Loader2, Plus, Zap, ChevronRight, Scale
+    ArrowRight, Loader2, Plus, ChevronRight, Scale
 } from "lucide-react";
 
 // --- YARDIMCI BİLEŞEN: SAYI SAYMA ANİMASYONU ---
@@ -48,7 +48,7 @@ function Dashboard() {
         totalCount: 0,
         totalDuration: 0,
         lastWorkoutDate: "Henüz Yok",
-        currentWeight: 0, // Sayı animasyonu için 0 başlattık
+        currentWeight: 0,
         weeklyData: [],
         recentWorkouts: []
     });
@@ -75,7 +75,8 @@ function Dashboard() {
                     getMyWorkouts(),
                     getProgressLogs()
                 ]);
-                calculateDashboardStats(workoutRes.data, progressRes.data);
+                // Verinin null gelme ihtimaline karşı || [] ekledik
+                calculateDashboardStats(workoutRes.data || [], progressRes.data || []);
             } catch (err) {
                 console.error("Dashboard veri hatası:", err);
             } finally {
@@ -85,29 +86,42 @@ function Dashboard() {
         fetchData();
     }, []);
 
-    const calculateDashboardStats = (workouts, progressLogs) => {
-        // 1. Toplamlar
-        const count = workouts.length;
-        const duration = workouts.reduce((sum, w) => sum + w.duration, 0);
+    const calculateDashboardStats = (workoutsData, progressLogsData) => {
+        // Güvenlik: Gelen verilerin dizi olduğundan emin olalım
+        const workouts = Array.isArray(workoutsData) ? workoutsData : [];
+        const progressLogs = Array.isArray(progressLogsData) ? progressLogsData : [];
 
-        // 2. Sıralama
-        const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
-        const sortedProgress = [...progressLogs].sort((a, b) => new Date(b.date) - new Date(a.date));
+        // 1. Toplamlar (Duration null ise 0 kabul et)
+        const count = workouts.length;
+        const duration = workouts.reduce((sum, w) => sum + (w.duration || 0), 0);
+
+        // 2. Sıralama (Date null ise en sona at)
+        const sortedWorkouts = [...workouts].sort((a, b) => {
+            const dateA = a.date ? new Date(a.date) : new Date(0);
+            const dateB = b.date ? new Date(b.date) : new Date(0);
+            return dateB - dateA;
+        });
+
+        const sortedProgress = [...progressLogs].sort((a, b) => {
+            const dateA = a.date ? new Date(a.date) : new Date(0);
+            const dateB = b.date ? new Date(b.date) : new Date(0);
+            return dateB - dateA;
+        });
 
         // 3. Son Antrenman
         let lastDate = "Yok";
-        if (sortedWorkouts.length > 0) {
+        if (sortedWorkouts.length > 0 && sortedWorkouts[0].date) {
             const d = new Date(sortedWorkouts[0].date);
             lastDate = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
         }
 
         // 4. Mevcut Kilo
-        let weight = 0; // Varsayılan sayısal değer
+        let weight = 0;
         if (sortedProgress.length > 0) {
-            weight = sortedProgress[0].weight;
+            weight = sortedProgress[0].weight || 0;
         }
 
-        // 5. Haftalık Grafik
+        // 5. Haftalık Grafik (KRİTİK DÜZELTME BURADA YAPILDI)
         const last7Days = [];
         for (let i = 6; i >= 0; i--) {
             const d = new Date();
@@ -115,8 +129,9 @@ function Dashboard() {
             const dateStr = d.toISOString().split('T')[0];
 
             const totalDur = workouts
-                .filter(w => w.date.startsWith(dateStr))
-                .reduce((sum, w) => sum + w.duration, 0);
+                // w.date VARSA ve startWith tutuyorsa (Null check eklendi)
+                .filter(w => w.date && w.date.startsWith(dateStr))
+                .reduce((sum, w) => sum + (w.duration || 0), 0);
 
             const dayName = d.toLocaleDateString('tr-TR', { weekday: 'short' });
             last7Days.push({ name: dayName, sure: totalDur });
@@ -143,7 +158,6 @@ function Dashboard() {
 
             {/* --- PREMIUM HEADER --- */}
             <div className="relative bg-slate-900 rounded-3xl p-8 overflow-hidden shadow-2xl text-white">
-                {/* Arkaplan Efektleri */}
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] -mr-20 -mt-20"></div>
                 <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-600/20 rounded-full blur-[80px] -ml-20 -mb-20"></div>
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 pointer-events-none"></div>
@@ -171,7 +185,7 @@ function Dashboard() {
                 </div>
             </div>
 
-            {/* --- 1. KPI KARTLARI (Hover Efektli) --- */}
+            {/* --- 1. KPI KARTLARI --- */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 {/* Kart 1: Toplam Seans */}
@@ -322,11 +336,11 @@ function Dashboard() {
                                         <Dumbbell size={18} />
                                     </div>
                                     <span className="text-xs font-bold text-slate-500 bg-white px-2 py-1 rounded border border-slate-200">
-                                        {w.duration} dk
+                                        {w.duration || 0} dk
                                     </span>
                                 </div>
                                 <p className="text-sm font-bold text-slate-800">
-                                    {new Date(w.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}
+                                    {w.date ? new Date(w.date).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) : "Tarihsiz"}
                                 </p>
                                 <p className="text-xs text-slate-500 font-medium mt-1">
                                     {w.details?.length || 0} Hareket Tamamlandı
